@@ -1,4 +1,5 @@
 import os
+from pieces.pawn import Pawn
 class Board:
     def __init__(self):
         self.board = self._create_board()
@@ -15,15 +16,20 @@ class Board:
             ["R", "N", "B", "Q", "K", "B", "N", "R"],
         ]
     # لعرض البورد
-    def display(self):
+    def display(self, flip=False):
+        """عرض البورد. flip=True لللاعب الأسود."""
         print("\n    a b c d e f g h")
         print("  +-----------------+")
-        for i, row in enumerate(self.board):
-            # إضافة رقم الصف وحواجز جانبية لشكل احترافي
+
+        rows = self.board[::-1] if flip else self.board  # فقط عكس الصفوف
+        for i, row in enumerate(rows):
             row_str = " ".join(row)
-            print(f"{8 - i} | {row_str} | {8 - i}")
+            row_num = 8 - i if not flip else i + 1  # عكس أرقام الصفوف فقط
+            print(f"{row_num} | {row_str} | {row_num}")
+
         print("  +-----------------+")
         print("    a b c d e f g h\n")
+
     def check_move_for_board(self, start_row, start_col, end_row, end_col):
         start_piece = self.board[start_row][start_col]
         end_piece = self.board[end_row][end_col]
@@ -35,23 +41,56 @@ class Board:
             return False
 
         return True
+
     def move(self):
-        col_map = {'a':0, 'b':1, 'c':2, 'd':3, 'e':4, 'f':5, 'g':6, 'h':7} # خريطة لمساواة بين الحرف و رقم لسهولة تحويله لاحداثيات عامود
+        col_map = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
         while True:
             start = input("Enter the starting position: ").lower()
             end = input("Enter the ending position: ").lower()
-            start_col = col_map[start[0]]  # اخذ اول حرف من المدخل و وضعه في الخريطة لنحصل على الرفم المقابل له
-            start_row = 8 - int(start[1]) # لعكس الموقع نطرح من رقم سبعة الرقم المدخل و نزيد واحد نحصل على الصف
+
+            # تحقق من صحة الطول والمدخلات
+            if len(start) != 2 or len(end) != 2:
+                print("Invalid input format! Use e.g. 'e2'")
+                continue
+
+            if start[0] not in col_map or end[0] not in col_map:
+                print("Invalid column! Must be a-h")
+                continue
+
+            if not start[1].isdigit() or not end[1].isdigit():
+                print("Invalid row! Must be 1-8")
+                continue
+
+            start_col = col_map[start[0]]
+            start_row = 8 - int(start[1])
             end_col = col_map[end[0]]
             end_row = 8 - int(end[1])
-            if self.check_move_for_board(start_row, start_col, end_row, end_col) == False:
+
+            if not self.check_move_for_board(start_row, start_col, end_row, end_col):
                 print("Invalid Move")
                 continue
-            else:
-                break
-        self.board[end_row][end_col] = self.board[start_row][start_col] # نضع مكان الوجهة ما كان موجود في مكان البداية و مكان البداية نضع نقطة
-        self.board[start_row][start_col] = "."
-b = Board()
-b.display()
-b.move()
-b.display()
+
+            piece = self.board[start_row][start_col]
+            if piece.lower() == "p":
+                color = "white" if piece.isupper() else "black"
+                pawn = Pawn(color)
+                pawn_check = pawn.is_valid(self.board, start_row, start_col, end_row, end_col)
+                if not pawn_check:
+                    print("Invalid Piece!")
+                    continue
+
+
+
+            # تحريك القطعة
+            self.board[end_row][end_col] = self.board[start_row][start_col]
+            self.board[start_row][start_col] = "."
+            break
+
+
+board = Board()
+while True:
+    board.display()
+    board.move()
+    board.display(True)
+    board.move()
+
