@@ -53,4 +53,5 @@ class Board:
         self.board[start_row][start_col] = "."
 b = Board()
 b.display()
+b.move()
 b.display()
