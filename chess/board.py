@@ -26,9 +26,12 @@ class Board:
     # لتحريك قطعة بدون القواعد (حاليا)
     def move(self, start, end):
         col_map = {'a':0, 'b':1, 'c':2, 'd':3, 'e':4, 'f':5, 'g':6, 'h':7}
+        start_col = col_map[start[0]]
+        start_row = 8 - int(start[1])
+        end_col = col_map[end[0]]
+        end_row = 8 - int(end[1])
 
-    
-    
+
 
 b = Board()
 b.display()
