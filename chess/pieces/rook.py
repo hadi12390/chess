@@ -24,4 +24,3 @@ class Rook:
             return False
 
         return True
-

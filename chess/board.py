@@ -1,4 +1,3 @@
-import os
 from pieces.pawn import Pawn
 from pieces.rook import Rook
 class Board:
