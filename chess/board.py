@@ -3,6 +3,9 @@ from pieces.pawn import Pawn
 class Board:
     def __init__(self):
         self.board = self._create_board()
+        self.pieces = { # لحتى نعمل رمز لاسم الكلاس بنفس الحرف الموجود
+            'p':Pawn
+        }
     # لصنع البورد
     def _create_board(self):
         return [
@@ -70,17 +73,15 @@ class Board:
                 print("Invalid Move")
                 continue
 
-            piece = self.board[start_row][start_col]
-            if piece.lower() == "p": # اذا القطعة بعد ما فرضنا انها سمول طلعت p يعني بيدق
-                color = "white" if piece.isupper() else "black" # اللون بنحدده حسب حالة الحرف
-                pawn = Pawn(color) # بنعمل اوبجكت من كلاس Pawn
-                pawn_check = pawn.is_valid(self.board, start_row, start_col, end_row, end_col) # فنكشن موجودة في الكلاس بنستدعيهاو بنمرر كلشي
-                if not pawn_check:
-                    print("Invalid Piece!")
+            piece = self.board[start_row][start_col] # متغير اسمه piece بنحط فيه الرمز المطلوب تحريكه
+            piece_type = piece.lower() # بنسستم الرمز
+            if piece_type in self.pieces: # لو الرمز المطلوب تحريكه موجود بالسيستم
+                color = "white" if piece.isupper() else "black" # نعرف اللون لحتى نمرره للاوبجكت
+                piece_obj =  self.pieces[piece_type](color) # نعمل الاوبجكت عن طريق القاموس الي فوق
+
+                if not piece_obj.is_valid(self.board, start_row, start_col, end_row, end_col): # نحلبس
+                    print("Invalid Move for this piece")
                     continue
-
-
-
             # تحريك القطعة
             self.board[end_row][end_col] = self.board[start_row][start_col]
             self.board[start_row][start_col] = "."
