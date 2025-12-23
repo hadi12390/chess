@@ -97,3 +97,4 @@ while True:
     board.display(True)
     board.move()
 
+print("New Line")
