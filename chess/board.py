@@ -1,10 +1,12 @@
 import os
 from pieces.pawn import Pawn
+from pieces.rook import Rook
 class Board:
     def __init__(self):
         self.board = self._create_board()
         self.pieces = { # لحتى نعمل رمز لاسم الكلاس بنفس الحرف الموجود
-            'p':Pawn
+            'p':Pawn,
+            'r':Rook
         }
     # لصنع البورد
     def _create_board(self):
