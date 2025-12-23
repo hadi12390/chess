@@ -71,10 +71,10 @@ class Board:
                 continue
 
             piece = self.board[start_row][start_col]
-            if piece.lower() == "p":
-                color = "white" if piece.isupper() else "black"
-                pawn = Pawn(color)
-                pawn_check = pawn.is_valid(self.board, start_row, start_col, end_row, end_col)
+            if piece.lower() == "p": # اذا القطعة بعد ما فرضنا انها سمول طلعت p يعني بيدق
+                color = "white" if piece.isupper() else "black" # اللون بنحدده حسب حالة الحرف
+                pawn = Pawn(color) # بنعمل اوبجكت من كلاس Pawn
+                pawn_check = pawn.is_valid(self.board, start_row, start_col, end_row, end_col) # فنكشن موجودة في الكلاس بنستدعيهاو بنمرر كلشي
                 if not pawn_check:
                     print("Invalid Piece!")
                     continue
