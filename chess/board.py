@@ -1,13 +1,20 @@
+from chess.pieces.king import King
+from chess.pieces.queen import Queen
 from pieces.pawn import Pawn
 from pieces.rook import Rook
 from pieces.bishop import Bishop
+from pieces.knight import Knight
+from pieces.king import King
 class Board:
     def __init__(self):
         self.board = self._create_board()
         self.pieces = { # لحتى نعمل رمز لاسم الكلاس بنفس الحرف الموجود
             'p':Pawn,
             'r':Rook,
-            'b' : Bishop
+            'b' : Bishop,
+            'n' : Knight,
+            'q' : Queen,
+            'k' : King
         }
     # لصنع البورد
     def _create_board(self):
