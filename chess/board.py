@@ -120,6 +120,14 @@ class Board:
                 print("it's not your turn..")
                 continue
             # تحريك القطعة
-            self.board[end_row][end_col] = self.board[start_row][start_col]
+            temp_start = self.board[start_row][start_col]
+            temp_end = self.board[end_row][end_col]
+            self.board[end_row][end_col] = temp_start
             self.board[start_row][start_col] = "."
-            break
+            if self.is_check(turn):
+                print("Invalid Move")
+                self.board[end_row][end_col] = temp_end
+                self.board[start_row][start_col] = temp_start
+                continue
+            else:
+                break
