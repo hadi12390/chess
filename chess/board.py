@@ -104,3 +104,4 @@ while True:
     board.move()
     board.display(True)
     board.move()
+    print("New line")
