@@ -1,4 +1,3 @@
-from chess.pieces.king import King
 from chess.pieces.queen import Queen
 from pieces.pawn import Pawn
 from pieces.rook import Rook
@@ -55,7 +54,29 @@ class Board:
 
         return True
 
-    def move(self):
+    def is_check(self, color):
+        king_symbol = 'K' if color == "white" else 'k'
+
+        king_pos = None
+        for r, row in enumerate(self.board):
+            for c, piece in enumerate(row):
+                if piece == king_symbol:
+                    king_pos = (r, c)
+                    break
+            if king_pos:
+                break
+        king_row, king_col = king_pos
+        for r, row in enumerate(self.board):
+            for c, piece in enumerate(row):
+                if (piece.isupper() and color=="black") or (piece.islower() and color=="white"):
+                    piece_type = piece.lower()
+                    piece_obj = self.pieces[piece_type]("white" if color == "black" else "black")
+                    if piece_obj.is_valid(self.board, r, c, king_row, king_col):
+                        return True
+        return False
+
+
+    def move(self, turn):
         col_map = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
         while True:
             start = input("Enter the starting position: ").lower()
@@ -92,16 +113,13 @@ class Board:
                 if not piece_obj.is_valid(self.board, start_row, start_col, end_row, end_col): # نحلبس
                     print("Invalid Move for this piece")
                     continue
+            if turn == "white" and self.board[start_row][start_col].islower():
+                print("it's not your turn..")
+                continue
+            if turn == "black" and self.board[start_row][start_col].isupper():
+                print("it's not your turn..")
+                continue
             # تحريك القطعة
             self.board[end_row][end_col] = self.board[start_row][start_col]
             self.board[start_row][start_col] = "."
             break
-
-
-board = Board()
-while True:
-    board.display()
-    board.move()
-    board.display(True)
-    board.move()
-    print("New line")
