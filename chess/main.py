@@ -1,7 +1,11 @@
 from board import Board
 b = Board()
 while True:
-    b.display()
+    if b.is_check("white"):
+        b.display()
+        print("⚠ White king is in check ⚠")
+    else:
+        b.display()
     b.move("white")
     if b.check_mate("black"):
         b.display(True)
@@ -12,6 +16,10 @@ while True:
         print("Black Win..CheckMate")
         break
     else:
-        b.display(True)
+        if b.is_check("black"):
+            b.display(True)
+            print("⚠ Black king is in check ⚠")
+        else:
+            b.display(True)
         b.move("black")
         continue

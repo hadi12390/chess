@@ -56,11 +56,13 @@ class Board:
 
         return True
 
-    def is_check(self, color):
+    def is_check(self, color, board=None):
+        if board is None:
+            board = self.board
         king_symbol = 'K' if color == "white" else 'k'
 
         king_pos = None
-        for r, row in enumerate(self.board):
+        for r, row in enumerate(board):
             for c, piece in enumerate(row):
                 if piece == king_symbol:
                     king_pos = (r, c)
@@ -68,12 +70,12 @@ class Board:
             if king_pos:
                 break
         king_row, king_col = king_pos
-        for r, row in enumerate(self.board):
+        for r, row in enumerate(board):
             for c, piece in enumerate(row):
                 if (piece.isupper() and color=="black") or (piece.islower() and color=="white"):
                     piece_type = piece.lower()
                     piece_obj = self.pieces[piece_type]("white" if color == "black" else "black")
-                    if piece_obj.is_valid(self.board, r, c, king_row, king_col):
+                    if piece_obj.is_valid(board, r, c, king_row, king_col):
                         return True
         return False
 
@@ -103,16 +105,11 @@ class Board:
                                 temp_end = temp_board[er][ec]
                                 temp_board[er][ec] = temp_start
                                 temp_board[r][c] = '.'
-                                if not self.is_check(color):
+                                if not self.is_check(color, temp_board):
                                     temp_board[er][ec] = temp_end
                                     temp_board[r][c] = temp_start
                                     return False
         return True
-
-
-
-
-
 
     def move(self, turn):
         col_map = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
@@ -158,15 +155,34 @@ class Board:
                 print("it's not your turn..")
                 continue
             # تحريك القطعة
-            temp_start = self.board[start_row][start_col]
-            temp_end = self.board[end_row][end_col]
-            self.board[end_row][end_col] = temp_start
-            self.board[start_row][start_col] = "."
-            if self.is_check(turn):
-                print("Invalid Move")
-                self.board[end_row][end_col] = temp_end
-                self.board[start_row][start_col] = temp_start
-                continue
+            if (piece == 'p' and end_row == 7) or (piece == 'P' and end_row == 0):
+                promotion = input(
+                    f"promot to ({'Q' if piece.isupper() else 'q'}, {'R' if piece.isupper() else 'r'}, {'N' if piece.isupper() else 'n'}, {'B' if piece.isupper() else 'b'}): ")
+                if piece.isupper():
+                    promotion = promotion.upper()
+                else:
+                    promotion = promotion.lower()
+                temp_start = self.board[start_row][start_col]
+                temp_end = self.board[end_row][end_col]
+                self.board[end_row][end_col] = promotion
+                self.board[start_row][start_col] = '.'
+                if self.is_check(turn):
+                    print("Invalid Move king is in check")
+                    self.board[end_row][end_col] = temp_end
+                    self.board[start_row][start_col] = temp_start
+                    continue
+                else:
+                    break
             else:
-                break
+                temp_start = self.board[start_row][start_col]
+                temp_end = self.board[end_row][end_col]
+                self.board[end_row][end_col] = temp_start
+                self.board[start_row][start_col] = "."
+                if self.is_check(turn):
+                    print("Invalid Move king is in check")
+                    self.board[end_row][end_col] = temp_end
+                    self.board[start_row][start_col] = temp_start
+                    continue
+                else:
+                    break
 
