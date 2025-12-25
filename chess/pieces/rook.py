@@ -1,6 +1,7 @@
 class Rook:
     def __init__(self, color):
         self.color = color
+        self.has_moved = False
 
     def is_valid(self, board, sr, sc, er, ec):
         direction_ud = -1 if sr > er else 1

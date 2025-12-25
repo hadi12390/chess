@@ -1,6 +1,7 @@
 class Knight:
     def __init__(self, color):
         self.color = color
+        self.has_moved = False
     def is_valid(self, board, sr, sc, er, ec):
         delta_R = abs(er - sr)
         delta_C = abs(ec - sc)

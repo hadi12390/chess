@@ -1,5 +1,4 @@
 import copy
-
 from chess.pieces.queen import Queen
 from pieces.pawn import Pawn
 from pieces.rook import Rook
@@ -17,6 +16,7 @@ class Board:
             'q' : Queen,
             'k' : King
         }
+        self.has_moved = {}
     # لصنع البورد
     def _create_board(self):
         return [
@@ -172,6 +172,7 @@ class Board:
                     self.board[start_row][start_col] = temp_start
                     continue
                 else:
+                    self.has_moved[(end_row, end_col)] = True
                     break
             else:
                 temp_start = self.board[start_row][start_col]
@@ -184,5 +185,6 @@ class Board:
                     self.board[start_row][start_col] = temp_start
                     continue
                 else:
+                    self.has_moved[(end_row, end_col)] = True
                     break
 

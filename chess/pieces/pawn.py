@@ -1,6 +1,7 @@
 class Pawn:
     def __init__(self, color):
         self.color = color
+        self.has_moved = False
 
     def is_valid(self, board, sr, sc, er, ec):
         direction = -1 if self.color == "white" else 1

@@ -1,6 +1,7 @@
 class Bishop:
     def __init__(self, color):
         self.color = color
+        self.has_moved = False
     def is_valid(self, board, sr, sc, er, ec):
         if abs(er - sr) != abs(ec - sc):
             return False

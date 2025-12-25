@@ -1,6 +1,7 @@
 class  King:
     def __init__(self, color):
         self.color = color
+        self.has_moved = False
     def is_valid(self, board, sr, sc, er, ec):
         if max(abs(er - sr), abs(ec - sc)) != 1:
             return False
@@ -9,5 +10,4 @@ class  King:
             return False
         if self.color == "white" and target.isupper():
             return False
-
         return True
