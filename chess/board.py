@@ -1,3 +1,5 @@
+import copy
+
 from chess.pieces.queen import Queen
 from pieces.pawn import Pawn
 from pieces.rook import Rook
@@ -75,6 +77,42 @@ class Board:
                         return True
         return False
 
+    def check_mate(self, color):
+        king_symbol = 'K' if color == "white" else 'k'
+        king_pos = None
+        for r, row in enumerate(self.board):
+            for c, piece in enumerate(row):
+                if piece == king_symbol:
+                    king_pos = (r, c)
+                    break
+            if king_pos:
+                break
+        king_row, king_col = king_pos
+        if not self.is_check(color):
+            return False
+        for r, row in enumerate(self.board):
+            for c, piece in enumerate(row):
+                if (piece.isupper() and color=="white") or (piece.islower() and color=="black"):
+                    piece_type = piece.lower()
+                    piece_obj = self.pieces[piece_type](color)
+                    for er in range(8):
+                        for ec in range(8):
+                            if piece_obj.is_valid(self.board, r, c, er, ec):
+                                temp_board = copy.deepcopy(self.board)
+                                temp_start = temp_board[r][c]
+                                temp_end = temp_board[er][ec]
+                                temp_board[er][ec] = temp_start
+                                temp_board[r][c] = '.'
+                                if not self.is_check(color):
+                                    temp_board[er][ec] = temp_end
+                                    temp_board[r][c] = temp_start
+                                    return False
+        return True
+
+
+
+
+
 
     def move(self, turn):
         col_map = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
@@ -131,3 +169,4 @@ class Board:
                 continue
             else:
                 break
+
